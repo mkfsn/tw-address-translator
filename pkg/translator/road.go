@@ -1,33 +1,36 @@
 package translator
 
 import (
+	"bytes"
 	_ "embed"
-	"strings"
+	"encoding/csv"
+	"fmt"
 
 	"github.com/mkfsn/tw-address-translator/internal/trie"
 )
 
-//go:embed dataset/6.5_CEROAD11104.txt
-var ceRoadTXT string
+//go:embed dataset/road.csv
+var roadCSVData []byte
 
 type Road struct {
 	ChineseName string
 	EnglishName string
 }
 
-func buildRoadTrie(roadData string) *trie.Trie {
+func buildRoadTrie(rawData []byte) *trie.Trie {
 	newTrie := trie.NewTrie()
 
-	for _, line := range strings.Split(roadData, "\n") {
-		if line == "" {
-			continue
-		}
+	csvReader := csv.NewReader(bytes.NewReader(rawData))
 
-		parts := strings.Split(line, ",")
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		panic(fmt.Errorf("failed to read csv records: %s", err))
+	}
 
+	for _, record := range records {
 		road := Road{
-			ChineseName: parts[0][1 : len(parts[0])-1],
-			EnglishName: parts[1][1 : len(parts[1])-2],
+			ChineseName: record[0],
+			EnglishName: record[1],
 		}
 
 		newTrie.Insert(road.ChineseName, &road)

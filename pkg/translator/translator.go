@@ -10,7 +10,7 @@ var (
 
 func init() {
 	translator = newPostalAddressTranslator(
-		buildRoadTrie(ceRoadTXT),
+		buildRoadTrie(roadCSVData),
 		buildCountyTrie(countyXML),
 	)
 }
