@@ -15,20 +15,23 @@ import (
 )
 
 func main() {
-	xlsxFile, err := downloadXLSXFile()
+	url := "https://www.post.gov.tw/post/download/6.5_CEROAD11107.xlsx"
+	outputFile := "./road.csv"
+
+	xlsxFile, err := downloadXLSXFile(url)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if err := writeFile(xlsxFile, "./road.csv"); err != nil {
+	if err := writeFile(xlsxFile, outputFile); err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func downloadXLSXFile() (*xlsx.File, error) {
+func downloadXLSXFile(url string) (*xlsx.File, error) {
 	var c http.Client
 
-	req, err := http.NewRequest(http.MethodGet, "https://www.post.gov.tw/post/download/6.5_CEROAD11107.xlsx", nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
