@@ -1,9 +1,5 @@
 package trie
 
-import (
-	"unicode/utf8"
-)
-
 type Trie struct {
 	Root *Node
 }
@@ -31,16 +27,13 @@ func (t *Trie) Insert(key string, value interface{}) {
 }
 
 // Search returns the maximum match
-func (t *Trie) Search(text string) (string, interface{}, bool) {
+func (t *Trie) Search(text string) (interface{}, bool) {
 	cur := t.Root
 
-	var i int
-	var ch rune
-
-	for i, ch = range text {
+	for _, ch := range text {
 		node, ok := cur.Children[ch]
 		if !ok {
-			return "", "", false
+			break
 		}
 
 		cur = node
@@ -51,10 +44,10 @@ func (t *Trie) Search(text string) (string, interface{}, bool) {
 	}
 
 	if cur.Value != nil {
-		return text[:i+utf8.RuneLen(ch)], cur.Value, true
+		return cur.Value, true
 	}
 
-	return "", "", false
+	return nil, false
 }
 
 func (t *Trie) MaxDepth() int {

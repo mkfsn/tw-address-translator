@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mkfsn/tw-address-translator/internal/trie"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTrie_Search(t *testing.T) {
@@ -85,13 +86,15 @@ func TestTrie_Search(t *testing.T) {
 				newTrie.Insert(pair[0], pair[1])
 			}
 
-			_, got, ok := newTrie.Search(tt.text)
-			if tt.found != ok {
-				t.Errorf("Search() got = %v, want %v", ok, tt.found)
+			got, ok := newTrie.Search(tt.text)
+			if !tt.found {
+				assert.False(t, ok)
+				assert.Nil(t, got)
+				return
 			}
-			if got != tt.want {
-				t.Errorf("Search() got = %v, want %v", got.(string), tt.want)
-			}
+
+			assert.True(t, ok)
+			assert.Equal(t, tt.want, got.(string))
 		})
 	}
 }
