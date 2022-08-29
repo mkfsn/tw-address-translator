@@ -11,7 +11,7 @@ var (
 func init() {
 	translator = newPostalAddressTranslator(
 		buildRoadTrie(roadCSVData),
-		buildCountyTrie(countyXML),
+		buildCountyTrie(countyCSVData),
 	)
 }
 

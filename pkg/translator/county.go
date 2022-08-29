@@ -1,37 +1,40 @@
 package translator
 
 import (
+	"bytes"
 	_ "embed"
-	"encoding/xml"
+	"encoding/csv"
+	"fmt"
 	"strings"
 
 	"github.com/mkfsn/tw-address-translator/internal/trie"
 )
 
-//go:embed dataset/County_h_10906.xml
-var countyXML []byte
-
-type Counties struct {
-	Counties []County `xml:"County_h_10906"`
-}
+//go:embed dataset/county.csv
+var countyCSVData []byte
 
 type County struct {
-	Code        int    `xml:"欄位1"`
+	Code        string `xml:"欄位1"`
 	ChineseName string `xml:"欄位2"`
 	EnglishName string `xml:"欄位3"`
 }
 
-func buildCountyTrie(countyXML []byte) *trie.Trie {
-	var counties Counties
+func buildCountyTrie(rawData []byte) *trie.Trie {
+	csvReader := csv.NewReader(bytes.NewReader(rawData))
 
-	if err := xml.Unmarshal(countyXML, &counties); err != nil {
-		panic("failed to parse county data: invalid dataset")
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		panic(fmt.Errorf("failed to read csv records: %s", err))
 	}
 
 	newTrie := trie.NewTrie()
 
-	for _, county := range counties.Counties {
-		county := county
+	for _, record := range records {
+		county := County{
+			Code:        record[0],
+			ChineseName: record[1],
+			EnglishName: record[2],
+		}
 
 		newTrie.Insert(county.ChineseName, &county)
 

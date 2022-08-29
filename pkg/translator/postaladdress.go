@@ -2,7 +2,6 @@ package translator
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/mkfsn/tw-address-translator/internal/trie"
@@ -36,7 +35,6 @@ func (p *postalAddressTranslator) Translate(address string) (result string, err 
 	county := val.(*County)
 	address = address[len(county.ChineseName):]
 
-	log.Printf("address: %s\n", address)
 	val, ok = p.roadTrie.Search(address)
 	if !ok {
 		return "", ErrNoRoad
@@ -50,7 +48,7 @@ func (p *postalAddressTranslator) Translate(address string) (result string, err 
 		[]string{
 			remaining,
 			road.EnglishName,
-			fmt.Sprintf("%s %d", county.EnglishName, county.Code),
+			fmt.Sprintf("%s %s", county.EnglishName, county.Code),
 			"Taiwan",
 		},
 		", ",

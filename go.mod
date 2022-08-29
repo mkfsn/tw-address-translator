@@ -3,6 +3,7 @@ module github.com/mkfsn/tw-address-translator
 go 1.18
 
 require (
+	github.com/huangtao-sh/xls v0.0.4
 	github.com/stretchr/testify v1.8.0
 	github.com/tealeg/xlsx/v3 v3.2.4
 	golang.org/x/text v0.3.7
@@ -10,6 +11,8 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/extrame/goyymmdd v0.0.0-20210114090516-7cc815f00d1a // indirect
+	github.com/extrame/ole2 v0.0.0-20160812065207-d69429661ad7 // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/go-cmp v0.5.2 // indirect
