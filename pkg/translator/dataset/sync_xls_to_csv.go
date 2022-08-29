@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/csv"
 	"fmt"
 	"io/ioutil"
@@ -11,24 +12,24 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tealeg/xlsx/v3"
+	"github.com/huangtao-sh/xls"
 )
 
 func main() {
-	url := "https://www.post.gov.tw/post/download/6.5_CEROAD11107.xlsx"
-	outputFile := "./road.csv"
+	url := os.Args[1]
+	outputFile := os.Args[2]
 
-	xlsxFile, err := downloadXLSXFile(url)
+	xlsFile, err := downloadXLSFile(url)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if err := writeFile(xlsxFile, outputFile); err != nil {
+	if err := writeFile(xlsFile, outputFile); err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func downloadXLSXFile(url string) (*xlsx.File, error) {
+func downloadXLSFile(url string) (*xls.WorkBook, error) {
 	var c http.Client
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -46,10 +47,10 @@ func downloadXLSXFile(url string) (*xlsx.File, error) {
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read http body: %w", err)
+		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	f, err := xlsx.OpenBinary(b)
+	f, err := xls.OpenReader(bytes.NewReader(b), "")
 	if err != nil {
 		return nil, fmt.Errorf("failed to open xlsx binary: %w", err)
 	}
@@ -57,7 +58,7 @@ func downloadXLSXFile(url string) (*xlsx.File, error) {
 	return f, nil
 }
 
-func writeFile(xlsxFile *xlsx.File, filename string) error {
+func writeFile(xlsFile *xls.WorkBook, filename string) error {
 	csvFile, err := os.Create(filename)
 	if err != nil {
 		return fmt.Errorf("failed to create csv file: %w", err)
@@ -66,10 +67,10 @@ func writeFile(xlsxFile *xlsx.File, filename string) error {
 
 	csvWriter := csv.NewWriter(csvFile)
 
-	sheets, err := xlsxFile.ToSlice()
+	rows, err := xlsFile.GetRowsIndex(0)
 	if err != nil {
-		log.Fatalln(err)
+		return fmt.Errorf("failed to get rows: %w", err)
 	}
 
-	return csvWriter.WriteAll(sheets[0])
+	return csvWriter.WriteAll(rows)
 }
