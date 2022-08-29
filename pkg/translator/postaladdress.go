@@ -9,15 +9,17 @@ import (
 
 type postalAddressTranslator struct {
 	countyTrie              *trie.Trie
+	villageTrie             *trie.Trie
 	roadTrie                *trie.Trie
 	maxCountyLen            int
 	maxRoadLen              int
 	streetAddressTranslator Translator
 }
 
-func newPostalAddressTranslator(roadTrie *trie.Trie, countyTrie *trie.Trie) *postalAddressTranslator {
+func newPostalAddressTranslator(countyTrie, villageTrie, roadTrie *trie.Trie) *postalAddressTranslator {
 	w := &postalAddressTranslator{
 		countyTrie:              countyTrie,
+		villageTrie:             villageTrie,
 		roadTrie:                roadTrie,
 		maxRoadLen:              roadTrie.MaxDepth(),
 		maxCountyLen:            countyTrie.MaxDepth(),
