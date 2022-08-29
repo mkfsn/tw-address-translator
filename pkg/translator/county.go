@@ -14,9 +14,9 @@ import (
 var countyCSVData []byte
 
 type County struct {
-	Code        string `xml:"欄位1"`
-	ChineseName string `xml:"欄位2"`
-	EnglishName string `xml:"欄位3"`
+	Code        string
+	ChineseName string
+	EnglishName string
 }
 
 func buildCountyTrie(rawData []byte) *trie.Trie {
