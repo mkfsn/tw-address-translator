@@ -1,5 +1,6 @@
 package translator
 
+// Translator translates the provided address from Chinese to English
 type Translator interface {
 	Translate(address string) (string, error)
 }
@@ -16,6 +17,7 @@ func init() {
 	)
 }
 
+// New returns a chinese-to-english address translator.
 func New() Translator {
 	return translator
 }
