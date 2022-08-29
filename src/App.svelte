@@ -2,6 +2,13 @@
 	import {Container, Alert, Input, Button, Row, Col} from 'sveltestrap';
 </script>
 
+
+<svelte:head>
+	<title>Taiwan Address Translator</title>
+	<meta name="robots" content="noindex nofollow" />
+	<meta name="description" content="Taiwan Address Translator">
+</svelte:head>
+
 <main>
 	<Container>
 		<Alert color="primary">
