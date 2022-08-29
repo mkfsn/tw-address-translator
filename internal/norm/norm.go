@@ -15,15 +15,11 @@ type addressNormalizer struct {
 }
 
 func NewAddressNormalizer() *addressNormalizer {
-	// normalize address
 	return &addressNormalizer{
 		transformer: transform.Chain(
-			// 1. full-width
-			width.Narrow,
-			// 2. chinese number
-			// TODO
-			// 3. 之
-			// TODO
+			width.Narrow,             // full-width numbers to half-width numbers
+			chineseNumberTransformer, // chinese number to alpha-numbers
+			chineseHyphenTransformer, // chinese 之 to -
 		),
 	}
 }

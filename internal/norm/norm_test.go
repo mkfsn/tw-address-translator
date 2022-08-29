@@ -17,6 +17,14 @@ func TestAddressNormalizer_Normalize(t *testing.T) {
 			address: "１０樓",
 			want:    "10樓",
 		},
+		{
+			address: "２３４５巷",
+			want:    "2345巷",
+		},
+		{
+			address: "七八九巷",
+			want:    "789巷",
+		},
 	}
 	for _, tt := range tests {
 		t.Run("", func(t *testing.T) {
