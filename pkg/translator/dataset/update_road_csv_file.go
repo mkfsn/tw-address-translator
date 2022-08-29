@@ -60,7 +60,7 @@ func downloadXLSXFile(url string) (*xlsx.File, error) {
 func writeFile(xlsxFile *xlsx.File, filename string) error {
 	csvFile, err := os.Create(filename)
 	if err != nil {
-		return fmt.Errorf("failed to craete csv file: %w", err)
+		return fmt.Errorf("failed to create csv file: %w", err)
 	}
 	defer csvFile.Close()
 
